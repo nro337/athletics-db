@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+pocketbase_0.35.0_darwin_arm64/pb_data/*
+pocketbase_0.35.0_darwin_arm64/pocketbase
