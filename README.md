@@ -10,11 +10,11 @@
 3. Update `VITE_POCKETBASE_URL` in `.env` if your PocketBase server is running on a different address (default: `http://127.0.0.1:8090`)
 4. Install dependencies:
    ```bash
-   npm install
+   pnpm install
    ```
 5. Start the development server:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 ## Environment Variables
