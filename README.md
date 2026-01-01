@@ -1,7 +1,25 @@
 # Athletics DB
 
 ## Setup
-Download Pocketbase from https://pocketbase.io/docs/
+
+1. Download Pocketbase from https://pocketbase.io/docs/
+2. Copy `.env.example` to `.env` and configure the PocketBase URL:
+   ```bash
+   cp .env.example .env
+   ```
+3. Update `VITE_POCKETBASE_URL` in `.env` if your PocketBase server is running on a different address (default: `http://127.0.0.1:8090`)
+4. Install dependencies:
+   ```bash
+   npm install
+   ```
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Environment Variables
+
+- `VITE_POCKETBASE_URL` - The URL of your PocketBase server (default: `http://127.0.0.1:8090`)
 
 ---
 
