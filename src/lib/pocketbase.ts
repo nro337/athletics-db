@@ -21,8 +21,17 @@ export interface Athlete {
   updated: string
 }
 
+export interface Event {
+  id: string
+  name: string
+  core_event: boolean
+  created: string
+  updated: string
+}
+
 export interface AthleteExpanded extends Athlete {
   expand?: {
     country: Country
+    primary_events: Event[]
   }
 }
