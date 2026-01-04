@@ -24,9 +24,9 @@ jobs:
 
     - name: Install dependencies
       # Use `pnpm install` for clean installs in CI environments for reproducibility
-      run: pnpm install
+      run: npm install
 
     - name: Run tests
       # Use `npm test` if you have a test script in package.json
       # or run `vitest run` directly
-      run: pnpm test
+      run: npm test
