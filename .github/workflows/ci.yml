@@ -1,0 +1,32 @@
+# .github/workflows/ci.yml
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '24' # Use a supported Node.js version (e.g., 18, 20, or 22)
+        cache: 'pnpm' # Caches npm dependencies to speed up subsequent runs
+
+    - name: Install dependencies
+      # Use `pnpm install` for clean installs in CI environments for reproducibility
+      run: pnpm install
+
+    - name: Run tests
+      # Use `npm test` if you have a test script in package.json
+      # or run `vitest run` directly
+      run: pnpm test
