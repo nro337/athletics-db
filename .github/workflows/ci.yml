@@ -23,7 +23,7 @@ jobs:
         cache: 'npm' # Caches npm dependencies to speed up subsequent runs
 
     - name: Install dependencies
-      # Use `pnpm install` for clean installs in CI environments for reproducibility
+      # Use `npm install` for clean installs in CI environments for reproducibility
       run: npm install
 
     - name: Run tests
