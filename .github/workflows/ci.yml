@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '24' # Use a supported Node.js version (e.g., 18, 20, or 22)
-        cache: 'pnpm' # Caches npm dependencies to speed up subsequent runs
+        cache: 'npm' # Caches npm dependencies to speed up subsequent runs
 
     - name: Install dependencies
       # Use `pnpm install` for clean installs in CI environments for reproducibility
