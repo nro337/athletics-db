@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { parseMeetResults, formatMark, getEventType } from './parse_pdf';
-import type { MeetResults, Event } from './parsing_types';
+import type { MeetResults, Event, PDFSource } from './parsing_types';
 
 export default function MeetResultsParser() {
   const [results, setResults] = useState<MeetResults | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [source, setSource] = useState<PDFSource>('world-athletics');
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -20,7 +21,7 @@ export default function MeetResultsParser() {
     setError(null);
 
     try {
-      const meetResults = await parseMeetResults(file);
+      const meetResults = await parseMeetResults(file, source);
       setResults(meetResults);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to parse PDF');
@@ -50,6 +51,20 @@ export default function MeetResultsParser() {
       {/* File Upload */}
       <div className="mb-8">
         <label className="block mb-2 text-sm font-medium">
+          PDF Source
+        </label>
+        <select
+          value={source}
+          onChange={(e) => setSource(e.target.value as PDFSource)}
+          className="block w-full mb-4 text-sm border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={loading}
+        >
+          <option value="world-athletics">World Athletics</option>
+          <option value="usatf">USATF</option>
+          <option value="other">Other</option>
+        </select>
+        
+        <label className="block mb-2 text-sm font-medium">
           Upload Meet Results PDF
         </label>
         <input
@@ -59,6 +74,9 @@ export default function MeetResultsParser() {
           className="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer focus:outline-none p-2"
           disabled={loading}
         />
+        <p className="mt-2 text-xs text-gray-500">
+          Select the source that matches your PDF format. Different sources may have different formatting.
+        </p>
       </div>
 
       {/* Loading State */}
@@ -84,6 +102,11 @@ export default function MeetResultsParser() {
             <h2 className="text-2xl font-bold mb-2">{results.meetName}</h2>
             <p className="text-gray-700">{results.location}</p>
             <p className="text-gray-600">{results.date}</p>
+            {results.source && (
+              <p className="text-sm text-gray-500 mt-2">
+                Source: <span className="font-semibold">{results.source}</span>
+              </p>
+            )}
             <button
               onClick={downloadJSON}
               className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"

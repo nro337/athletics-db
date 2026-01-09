@@ -1,4 +1,4 @@
-import type { MeetResults, Event, Athlete } from './parsing_types';
+import type { MeetResults, Event, Athlete, PDFSource } from './parsing_types';
 
 // Configure PDF.js worker on module load
 let workerConfigured = false;
@@ -17,8 +17,10 @@ async function configurePDFWorker() {
 /**
  * Parse track and field meet results from a PDF file
  * For use in browser with Vite-React
+ * @param file - The PDF file to parse
+ * @param source - The source of the PDF (e.g., 'world-athletics', 'usatf', 'other')
  */
-export async function parseMeetResults(file: File): Promise<MeetResults> {
+export async function parseMeetResults(file: File, source?: PDFSource): Promise<MeetResults> {
   // Configure worker first
   await configurePDFWorker();
   
@@ -44,6 +46,7 @@ export async function parseMeetResults(file: File): Promise<MeetResults> {
     meetName: '',
     location: '',
     date: '',
+    source: source || 'world-athletics', // Default to world-athletics for backward compatibility
     events: []
   };
   
@@ -146,8 +149,10 @@ export async function parseMeetResults(file: File): Promise<MeetResults> {
 
 /**
  * Alternative parser using table extraction
+ * @param file - The PDF file to parse
+ * @param source - The source of the PDF (e.g., 'world-athletics', 'usatf', 'other')
  */
-export async function parseMeetResultsWithTables(file: File): Promise<MeetResults> {
+export async function parseMeetResultsWithTables(file: File, source?: PDFSource): Promise<MeetResults> {
   // Configure worker first
   await configurePDFWorker();
   
@@ -170,6 +175,7 @@ export async function parseMeetResultsWithTables(file: File): Promise<MeetResult
     meetName: '',
     location: '',
     date: '',
+    source: source || 'world-athletics', // Default to world-athletics for backward compatibility
     events: []
   };
   
