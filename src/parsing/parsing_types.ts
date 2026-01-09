@@ -16,9 +16,16 @@ export interface Event {
   athletes: Athlete[];
 }
 
+/**
+ * Supported PDF sources for meet results
+ * Different sources may have different formatting which requires different parsing strategies
+ */
+export type PDFSource = 'world-athletics' | 'usatf' | 'other';
+
 export interface MeetResults {
   meetName: string;
   location: string;
   date: string;
+  source?: PDFSource; // Source of the PDF (e.g., 'world-athletics', 'usatf', 'other')
   events: Event[];
 }
