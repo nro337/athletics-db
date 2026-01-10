@@ -63,6 +63,9 @@ export default function MeetResultsParser() {
           <option value="usatf">USATF</option>
           <option value="other">Other</option>
         </select>
+        <p className="mt-0 mb-2 text-xs text-gray-500">
+          Select the source that matches your PDF format. Different sources may have different formatting.
+        </p>
         
         <label className="block mb-2 text-sm font-medium">
           Upload Meet Results PDF
@@ -74,9 +77,6 @@ export default function MeetResultsParser() {
           className="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer focus:outline-none p-2"
           disabled={loading}
         />
-        <p className="mt-2 text-xs text-gray-500">
-          Select the source that matches your PDF format. Different sources may have different formatting.
-        </p>
       </div>
 
       {/* Loading State */}
@@ -98,12 +98,12 @@ export default function MeetResultsParser() {
       {results && !loading && (
         <div>
           {/* Meet Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+          <div className="bg-slate-500 border border-blue-200 rounded-lg p-6 mb-6">
             <h2 className="text-2xl font-bold mb-2">{results.meetName}</h2>
             <p className="text-gray-700">{results.location}</p>
             <p className="text-gray-600">{results.date}</p>
             {results.source && (
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm mt-2">
                 Source: <span className="font-semibold">{results.source}</span>
               </p>
             )}
@@ -123,7 +123,7 @@ export default function MeetResultsParser() {
           </div>
 
           {/* Summary */}
-          <div className="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <div className="mt-8 bg-slate-600 border border-gray-200 rounded-lg p-4">
             <h3 className="font-bold mb-2">Summary</h3>
             <p>Total Events: {results.events.length}</p>
             <p>
@@ -144,14 +144,14 @@ function EventCard({ event }: { event: Event }) {
     <div className="border border-gray-300 rounded-lg overflow-hidden">
       {/* Event Header */}
       <div
-        className="bg-gray-100 p-4 cursor-pointer hover:bg-gray-200 transition"
+        className="bg-slate-600 p-4 cursor-pointer hover:bg-slate-400 transition"
         onClick={() => setExpanded(!expanded)}
       >
         <div className="flex justify-between items-center">
           <div>
-            <span className="text-xs text-gray-500 uppercase">{event.category}</span>
+            <span className="text-xs text-gray-300 uppercase">{event.category}</span>
             <h3 className="text-lg font-bold">{event.eventName}</h3>
-            {event.round && <span className="text-sm text-gray-600">{event.round}</span>}
+            {event.round && <span className="text-sm text-gray-200">{event.round}</span>}
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
@@ -188,7 +188,7 @@ function EventCard({ event }: { event: Event }) {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {event.athletes.map((athlete, idx) => (
-                <tr key={idx} className="hover:bg-gray-50">
+                <tr key={idx} className="hover:bg-slate-500">
                   <td className="px-4 py-3">
                     <span
                       className={`inline-flex items-center justify-center w-8 h-8 rounded-full font-bold ${
@@ -205,7 +205,7 @@ function EventCard({ event }: { event: Event }) {
                     </span>
                   </td>
                   <td className="px-4 py-3 font-medium">{athlete.name}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{athlete.birthDate}</td>
+                  <td className="px-4 py-3 text-sm text-gray-200">{athlete.birthDate}</td>
                   <td className="px-4 py-3">
                     <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold">
                       {athlete.country}
