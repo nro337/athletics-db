@@ -60,7 +60,9 @@ export async function parseMeetResults(file: File, source?: PDFSource): Promise<
     if (lines[i].includes('Boston') || lines[i].match(/\([A-Z]{3}\)/)) {
       meetResults.location = lines[i];
     }
-    if (lines[i].match(/\d{2}\s+[A-Z]{3}\s+\d{4}/)) {
+    // Match date that is NOT part of an athlete result line (which starts with "1. Name...")
+    // The date line should be standalone or part of header info
+    if (lines[i].match(/\d{2}\s+[A-Z][a-z]{2}\s+\d{4}/) && !lines[i].match(/^\d+\./)) {
       meetResults.date = lines[i];
     }
   }
@@ -188,7 +190,9 @@ export async function parseMeetResultsWithTables(file: File, source?: PDFSource)
     if (lines[i].match(/\([A-Z]{3}\)/) && !meetResults.location) {
       meetResults.location = lines[i];
     }
-    if (lines[i].match(/\d{2}\s+[A-Z]{3}\s+\d{4}/) && !meetResults.date) {
+    // Match date that is NOT part of an athlete result line (which starts with "1. Name...")
+    // The date line should be standalone or part of header info
+    if (lines[i].match(/\d{2}\s+[A-Z][a-z]{2}\s+\d{4}/) && !lines[i].match(/^\d+\./) && !meetResults.date) {
       meetResults.date = lines[i];
     }
   }

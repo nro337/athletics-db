@@ -3,15 +3,16 @@ import { formatMark, getEventType } from './parse_pdf';
 import type { PDFSource } from './parsing_types';
 
 // Mock pdf-parse module
+const mockSetWorker = vi.fn();
+const mockPDFParse = vi.fn().mockImplementation(() => ({
+  getText: vi.fn(),
+  getTable: vi.fn(),
+  destroy: vi.fn(),
+}));
+mockPDFParse.setWorker = mockSetWorker;
+
 vi.mock('pdf-parse', () => ({
-  PDFParse: vi.fn().mockImplementation(() => ({
-    getText: vi.fn(),
-    getTable: vi.fn(),
-    destroy: vi.fn(),
-  })),
-  default: {
-    setWorker: vi.fn(),
-  },
+  PDFParse: mockPDFParse,
 }));
 
 describe('pdfParser', () => {
@@ -193,6 +194,46 @@ describe('pdfParser', () => {
       // This test documents the API - actual integration testing would require mocking File objects
       // and the pdf-parse library more extensively
       expect(true).toBe(true);
+    });
+  });
+
+  describe('Date parsing', () => {
+    it('should extract meet date and not athlete birth dates', async () => {
+      const { parseMeetResults } = await import('./parse_pdf');
+      const { PDFParse } = await import('pdf-parse');
+      
+      // Mock PDF text with meet date and athlete birth dates
+      const mockPDFText = `
+World Athletics Indoor Tour
+Boston (USA)
+02 Feb 2025
+Men's 60 Metres
+Final
+1. John DOE 15 Jan 2000 USA 6.50
+2. Jane SMITH 20 Mar 1998 GBR 6.55
+      `.trim();
+      
+      const mockGetText = vi.fn().mockResolvedValue({ text: mockPDFText });
+      const mockDestroy = vi.fn().mockResolvedValue(undefined);
+      
+      // Mock implementation needs to be a constructor function
+      (PDFParse as unknown as ReturnType<typeof vi.fn>).mockImplementation(function() {
+        return {
+          getText: mockGetText,
+          getTable: vi.fn(),
+          destroy: mockDestroy,
+        };
+      });
+      
+      // Create a mock File
+      const mockFile = new File(['mock content'], 'test.pdf', { type: 'application/pdf' });
+      
+      const results = await parseMeetResults(mockFile);
+      
+      // The date should be "02 Feb 2025" (the meet date), not "15 Jan 2000" or "20 Mar 1998" (athlete birth dates)
+      expect(results.date).toBe('02 Feb 2025');
+      expect(results.date).not.toBe('15 Jan 2000');
+      expect(results.date).not.toBe('20 Mar 1998');
     });
   });
 });
