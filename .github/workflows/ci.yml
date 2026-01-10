@@ -28,6 +28,8 @@ jobs:
 
     - name: Run Knip
       # Check for unused files, dependencies, and exports
+      # Note: Knip will fail the build if it finds issues to encourage clean code
+      # Use --no-exit-code flag if you want to allow issues temporarily
       run: npm run knip
 
     - name: Run tests
