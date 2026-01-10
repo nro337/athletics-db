@@ -3,17 +3,15 @@ import { formatMark, getEventType } from './parse_pdf';
 import type { PDFSource } from './parsing_types';
 
 // Mock pdf-parse module
-const mockSetWorker = vi.fn();
-const mockPDFParse = vi.fn().mockImplementation(() => ({
-  getText: vi.fn(),
-  getTable: vi.fn(),
-  destroy: vi.fn(),
-}));
-// Add setWorker as a static method on the mock constructor
-mockPDFParse.setWorker = mockSetWorker;
-
 vi.mock('pdf-parse', () => ({
-  PDFParse: mockPDFParse,
+  PDFParse: vi.fn().mockImplementation(() => ({
+    getText: vi.fn(),
+    getTable: vi.fn(),
+    destroy: vi.fn(),
+  })),
+  default: {
+    setWorker: vi.fn(),
+  },
 }));
 
 describe('pdfParser', () => {
