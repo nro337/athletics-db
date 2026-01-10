@@ -26,6 +26,10 @@ jobs:
       # Use `npm install` for clean installs in CI environments for reproducibility
       run: npm install
 
+    - name: Run Knip
+      # Check for unused files, dependencies, and exports
+      run: npm run knip
+
     - name: Run tests
       # Use `npm test` if you have a test script in package.json
       # or run `vitest run` directly
