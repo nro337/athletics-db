@@ -21,6 +21,27 @@
 
 - `VITE_POCKETBASE_URL` - The URL of your PocketBase server (default: `http://127.0.0.1:8090`)
 
+## Code Quality Tools
+
+### Knip
+
+This project uses [Knip](https://knip.dev/) to find unused files, dependencies, and exports. This helps keep the codebase clean and maintainable.
+
+To run Knip locally:
+```bash
+npm run knip
+```
+
+Knip will report:
+- Unused files
+- Unused dependencies
+- Unused exports and types
+- Unlisted dependencies
+
+The CI/CD pipeline automatically runs Knip to ensure code quality. If Knip finds issues, the build will fail to encourage maintaining a clean codebase.
+
+To temporarily allow issues in CI (not recommended for production), you can modify the CI workflow to use the `--no-exit-code` flag.
+
 ---
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

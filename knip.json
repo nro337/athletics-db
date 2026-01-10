@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/main.tsx"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}"
+  ],
+  "ignore": [
+    "**/*.test.{ts,tsx}",
+    "dist/**",
+    "node_modules/**",
+    "src/routeTree.gen.ts"
+  ],
+  "eslint": true,
+  "vitest": true
+}
