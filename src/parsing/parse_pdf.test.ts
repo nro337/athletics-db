@@ -206,11 +206,11 @@ describe('pdfParser', () => {
       const mockPDFText = `
 World Athletics Indoor Tour
 Boston (USA)
-02 Feb 2025
+02 FEB 2025
 Men's 60 Metres
 Final
-1. John DOE 15 Jan 2000 USA 6.50
-2. Jane SMITH 20 Mar 1998 GBR 6.55
+1. John DOE 15 JAN 2000 USA 6.50
+2. Jane SMITH 20 MAR 1998 GBR 6.55
       `.trim();
       
       const mockGetText = vi.fn().mockResolvedValue({ text: mockPDFText });
@@ -230,10 +230,10 @@ Final
       
       const results = await parseMeetResults(mockFile);
       
-      // The date should be "02 Feb 2025" (the meet date), not "15 Jan 2000" or "20 Mar 1998" (athlete birth dates)
-      expect(results.date).toBe('02 Feb 2025');
-      expect(results.date).not.toBe('15 Jan 2000');
-      expect(results.date).not.toBe('20 Mar 1998');
+      // The date should be "02 FEB 2025" (the meet date), not "15 JAN 2000" or "20 MAR 1998" (athlete birth dates)
+      expect(results.date).toBe('02 FEB 2025');
+      expect(results.date).not.toBe('15 JAN 2000');
+      expect(results.date).not.toBe('20 MAR 1998');
     });
   });
 });
