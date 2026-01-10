@@ -3,15 +3,17 @@ import { formatMark, getEventType } from './parse_pdf';
 import type { PDFSource } from './parsing_types';
 
 // Mock pdf-parse module
+const mockSetWorker = vi.fn();
+const mockPDFParse = vi.fn().mockImplementation(() => ({
+  getText: vi.fn(),
+  getTable: vi.fn(),
+  destroy: vi.fn(),
+}));
+// Add setWorker as a static method on the mock constructor
+mockPDFParse.setWorker = mockSetWorker;
+
 vi.mock('pdf-parse', () => ({
-  PDFParse: vi.fn().mockImplementation(() => ({
-    getText: vi.fn(),
-    getTable: vi.fn(),
-    destroy: vi.fn(),
-  })),
-  default: {
-    setWorker: vi.fn(),
-  },
+  PDFParse: mockPDFParse,
 }));
 
 describe('pdfParser', () => {
@@ -233,6 +235,41 @@ Final
       expect(results.date).toBe('02 FEB 2025');
       expect(results.date).not.toBe('15 JAN 2000');
       expect(results.date).not.toBe('20 MAR 1998');
+    });
+
+    it('should extract date from lines containing additional text', async () => {
+      const { parseMeetResults } = await import('./parse_pdf');
+      const { PDFParse } = await import('pdf-parse');
+      
+      // Mock PDF text with date embedded in a longer line like "Day 1 - 02 FEB 2025"
+      const mockPDFText = `
+World Athletics Indoor Tour
+Boston (USA)
+Day 1 - 02 FEB 2025
+Men's 60 Metres
+Final
+1. John DOE 15 JAN 2000 USA 6.50
+      `.trim();
+      
+      const mockGetText = vi.fn().mockResolvedValue({ text: mockPDFText });
+      const mockDestroy = vi.fn().mockResolvedValue(undefined);
+      
+      // Mock implementation needs to be a constructor function
+      (PDFParse as unknown as ReturnType<typeof vi.fn>).mockImplementation(function() {
+        return {
+          getText: mockGetText,
+          getTable: vi.fn(),
+          destroy: mockDestroy,
+        };
+      });
+      
+      // Create a mock File
+      const mockFile = new File(['mock content'], 'test.pdf', { type: 'application/pdf' });
+      
+      const results = await parseMeetResults(mockFile);
+      
+      // The date should be extracted as "02 FEB 2025", not "Day 1 - 02 FEB 2025"
+      expect(results.date).toBe('02 FEB 2025');
     });
   });
 });
